@@ -4,7 +4,8 @@ import HourglassFullTwoToneIcon from '@mui/icons-material/HourglassFullTwoTone';
 import VerifiedOutlinedIcon from '@mui/icons-material/VerifiedOutlined';
 
 const HiringCard = ({ job }) => {
-    
+    // Check if job object is defined and has an id property
+    const cardKey = job && job.id ? job.id : null;
     
     const postedDays = job && job.maxJdSalary ? parseInt(job.maxJdSalary / 30) : 0;
     
@@ -17,7 +18,7 @@ const HiringCard = ({ job }) => {
         : "As per industry standards";
     
     return (
-        <Card sx={{ margin: 2, boxShadow: 2, border: "1px solid #d7dbd8", borderRadius: 5 }} key={job.id}>
+        <Card sx={{ margin: 2, boxShadow: 2, border: "1px solid #d7dbd8", borderRadius: 5 }} key={cardKey}>
             <CardContent>
                 <Box sx={{ border: "2px solid #d7dbd8", borderRadius: 4, display: 'flex', flexDirection: 'row', alignItems: 'center', width: '50%', pl: 1, sx: { width: ['50%', '40%', '33%'] } }}>
                     <HourglassFullTwoToneIcon sx={{ fontSize: 13 }} />
