@@ -4,7 +4,7 @@ import HourglassFullTwoToneIcon from '@mui/icons-material/HourglassFullTwoTone';
 import VerifiedOutlinedIcon from '@mui/icons-material/VerifiedOutlined';
 
 const HiringCard = ({ job }) => {
-    // Check if job object is defined and has an id property
+    
     const cardKey = job && job.id ? job.id : null;
     
     const postedDays = job && job.maxJdSalary ? parseInt(job.maxJdSalary / 30) : 0;
