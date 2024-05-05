@@ -1,9 +1,10 @@
 import React, { useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchJobs, setFilteredJobs } from '../features/jobSlice.js';
-import JobCard from './jobCard.jsx';
+
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { Container, Grid, Box } from '@mui/material';
+import HiringCard from './HiringCard.jsx';
 
 const Hiringlist = ({ filters }) => {
  
@@ -47,7 +48,8 @@ const Hiringlist = ({ filters }) => {
                         <Grid container spacing={3}> 
                             {visibleJobs.map((job, index) => ( 
                                 <Grid item xs={12} sm={6} md={4} key={index}>
-                                    <JobCard job={job} />
+                                <HiringCard  job={job} />
+                                    
                                 </Grid>
                             ))}
                         </Grid>
