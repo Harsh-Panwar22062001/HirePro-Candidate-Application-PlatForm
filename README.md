@@ -48,7 +48,7 @@ Follow these steps to set up this React project on your local machine:
 This will start the local server, usually on port 3000. Your default web browser should open automatically to http://localhost:3000. If it doesn't, you can manually open a browser and enter this URL.
 
 
-**Deployment Link** 🔗 - http://Harsh-Panwar22062001.github.io/HirePro-Candidate-Application-PlatForm
+**Deployment Link** 🔗 - https://harsh-hirepro-assessment.netlify.app/
 
 
 
