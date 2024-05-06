@@ -12,10 +12,22 @@ function App() {
     workType: "",
     companyName: "",
   });
+
   return (
     <div className="App">
+      <h1
+        style={{
+          textAlign: "center",
+          margin: "20px 0",
+          fontSize: "2rem",
+          color: "#333",
+        }}
+      >
+        Explore Job Listings
+      </h1>
+
       <FiltersSection filters={filters} setFilters={setFilters} />
-      
+
       <Hiringlist filters={filters} />
     </div>
   );

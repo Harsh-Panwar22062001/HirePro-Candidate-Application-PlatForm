@@ -1,9 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+
 // Asynchronous thunk for fetching jobs
 export const fetchJobs = createAsyncThunk(
     'jobs/fetchJobs',
-    async ({ offset,filters }, { getState }) => {
-        //creating headers for fetching Apis 
+    async ({ offset, filters }, { getState }) => {
+        // Creating headers for fetching APIs 
         const myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
 
@@ -11,7 +12,6 @@ export const fetchJobs = createAsyncThunk(
             "limit": 10,
             "offset": offset,
             ...filters
-
         });
 
         const requestOptions = {
@@ -19,7 +19,7 @@ export const fetchJobs = createAsyncThunk(
             headers: myHeaders,
             body
         };
-        //calling Api by using REACT_APP_API_BASE from .env file to not show actual api
+        // Calling API by using REACT_APP_API_BASE from .env file to not show actual API
         const apiUrl = process.env.REACT_APP_API_BASE;
         const response = await fetch(apiUrl, requestOptions);
         const data = await response.json();
@@ -28,7 +28,7 @@ export const fetchJobs = createAsyncThunk(
 );
 
 const initialState = {
-    //create initial states to store the data and state while calling in jobList.jsx
+    // Initial states to store the data and state while calling in jobList.jsx
     allJobs: [],
     visibleJobs: [],
     isLoading: false,
@@ -39,65 +39,32 @@ const initialState = {
         minExp: null,
         minJdSalary: null,
         workType: '',
-        companyName:''
+        companyName: ''
     }
 };
 
 const JobKit = createSlice({
     name: 'jobs',
     initialState,
-    //creation of Reducers for filtering
+    // Reducers for filtering
     reducers: {
         setFilteredJobs: (state, action) => {
-            //getting data from filters which is dispatched from jobList.jsx
-            const { location, jobRole, minExp, minJdSalary, workType,companyName } = action.payload;
-            // getting all the data passed into state for filtering
-            state.filter = { location: location.toLowerCase(), jobRole: jobRole.toLowerCase(), minExp: minExp, minJdSalary: minJdSalary, workType: workType,companyName: companyName.toLowerCase() }
-            state.visibleJobs = state.allJobs.filter(job => {// matching all the conditions for filtering
-                const jobLocationMatches = job.location.toLowerCase().includes(state.filter.location);
-                const jobRoleMatches = job.jobRole.toLowerCase().includes(state.filter.jobRole);
-                //matching the minExp and null case
-                const minExpMatches = state.filter.minExp ? job.minExp >= state.filter.minExp : true;
-                //handling the minimumSalary and null case
-                const minSalaryMatches = state.filter.minJdSalary ? job.minJdSalary >= state.filter.minJdSalary : true;
-                const nameOfCompanyMatches =job.companyName.toLowerCase().includes(state.filter.companyName);
-                let workTypeMatches = true; // Assume all jobs match initially
-                if (state.filter.workType === 'remote') {
-                    workTypeMatches = job.location.toLowerCase() === 'remote';
-                } else if (state.filter.workType === 'onsite') {
-                    workTypeMatches = job.location.toLowerCase() !== 'remote';
-                }
-                return jobLocationMatches && jobRoleMatches && minExpMatches && minSalaryMatches && workTypeMatches  && nameOfCompanyMatches;
-
-            });
+            // Update filter state
+            state.filter = action.payload;
+            // Filter visible jobs
+            state.visibleJobs = filterJobs(state.allJobs, state.filter);
         },
-
     },
     extraReducers: (builder) => {
         builder
-            //adding extra reducers ,
-            //pending for if no data is loaded till now or during firstTime rendering of Project or onRefreshing
+            // Pending for if no data is loaded yet or during first-time rendering or on refreshing
             .addCase(fetchJobs.pending, (state) => {
                 state.isLoading = true;
             })
-            .addCase(fetchJobs.fulfilled, (state, action) => { //fetching data when givendata is whole rendered so new data can be fetched
+            // Fetching data when given data is fully rendered so new data can be fetched
+            .addCase(fetchJobs.fulfilled, (state, action) => {
                 state.allJobs = [...state.allJobs, ...action.payload];
-                state.visibleJobs = state.allJobs.filter(job => {// matching all the conditions for filtering as above reducers
-                    const jobLocationMatches = job.location.toLowerCase().includes(state.filter.location);
-                    const jobRoleMatches = job.jobRole.toLowerCase().includes(state.filter.jobRole);
-                    const minExpMatches = state.filter.minExp ? job.minExp >= state.filter.minExp : true;
-                    const minSalaryMatches = state.filter.minJdSalary ? job.minJdSalary >= state.filter.minJdSalary : true;
-                    const nameOfCompanyMatches =job.companyName.toLowerCase().includes(state.filter.companyName);
-                    let workTypeMatches = true; // Assume all jobs match initially
-                    if (state.filter.workType === 'remote') {
-                        workTypeMatches = job.location.toLowerCase() === 'remote';
-                    } else if (state.filter.workType === 'onsite') {
-                        workTypeMatches = job.location.toLowerCase() !== 'remote';
-                    }
-                    return jobLocationMatches && jobRoleMatches && minExpMatches && minSalaryMatches && workTypeMatches && nameOfCompanyMatches; 
-
-                }
-                );
+                state.visibleJobs = filterJobs(state.allJobs, state.filter);
                 state.hasMore = action.payload.length > 0;
                 state.isLoading = false;
             })
@@ -106,8 +73,21 @@ const JobKit = createSlice({
             });
     },
 });
-//exporting the reducers for use
+
+// Exporting the reducers for use
 export const { setFilteredJobs } = JobKit.actions;
 export default JobKit.reducer;
 
-
+// Helper function to filter jobs
+const filterJobs = (jobs, filter) => {
+    const { location, jobRole, minExp, minJdSalary, workType, companyName } = filter;
+    return jobs.filter(job => {
+        const jobLocationMatches = job.location?.toLowerCase().includes(location.toLowerCase()) || !location;
+        const jobRoleMatches = job.jobRole?.toLowerCase().includes(jobRole.toLowerCase()) || !jobRole;
+        const minExpMatches = minExp ? job.minExp >= minExp : true;
+        const minSalaryMatches = minJdSalary ? job.minJdSalary >= minJdSalary : true;
+        const companyNameMatches = job.companyName?.toLowerCase().includes(companyName.toLowerCase()) || !companyName;
+        const workTypeMatches = !workType || (workType === 'remote' ? job.location?.toLowerCase() === 'remote' : job.location?.toLowerCase() !== 'remote');
+        return jobLocationMatches && jobRoleMatches && minExpMatches && minSalaryMatches && companyNameMatches && workTypeMatches;
+    });
+};

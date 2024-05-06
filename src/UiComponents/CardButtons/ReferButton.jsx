@@ -1,32 +1,52 @@
 import React from "react";
 import { Button, Typography } from '@mui/material';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import PersonIcon from '@mui/icons-material/Person';
+import { useSpring, animated } from 'react-spring'; 
 
-/**
- * ReferralButton renders a button designed for initiating referral requests.
- * It emphasizes the referral action through the use of dual AccountCircle icons.
- */
+
 const ReferButton = () => {
+   
+    const springProps = useSpring({
+        from: { opacity: 0, transform: 'scale(0.8)' },
+        to: { opacity: 1, transform: 'scale(1)' },
+        config: { duration: 500 }
+    });
+
     return (
-        // Button container with centered alignment and top margin for spacing
-        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '10px' }}>
-            {/* Primary-colored button with custom purple background and rounded corners */}
-            <Button variant="contained" color="primary" 
-                style={{ backgroundColor: '#3e13eb', width: '100%', borderRadius: '10px' }}>
-                {/* Inline flex container to align icons and text within the button */}
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    {/* Container for AccountCircle icons, emphasizing the referral feature */}
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginRight: '10px' }}>
-                        <AccountCircleIcon style={{ fontSize: '2rem' }} />
-                        <AccountCircleIcon style={{ fontSize: '2rem' }} />
+      
+        <animated.div style={springProps}>
+           
+            <div style={{ display: 'flex', justifyContent: 'center', marginTop: '10px' }}>
+                
+                <Button 
+                    variant="contained" 
+                    color="primary" 
+                    style={{ 
+                        backgroundColor: '#6200EA',
+                        width: '100%', 
+                         margin:'5px',
+                        borderRadius: '10px',
+                        boxShadow: '0px 3px 10px rgba(0, 0, 0, 0.2)', 
+                        transition: 'box-shadow 0.3s ease',
+                    }}
+                    onMouseEnter={(e) => e.target.style.boxShadow = '0px 3px 15px rgba(0, 0, 0, 0.4)'} // Change shadow on hover
+                    onMouseLeave={(e) => e.target.style.boxShadow = '0px 3px 10px rgba(0, 0, 0, 0.2)'} // Restore shadow on mouse leave
+                >
+                   
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                       
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginRight: '10px' }}>
+                            <PersonIcon style={{ fontSize: '2rem', color: '#FFD700' }} /> 
+                            <PersonIcon style={{ fontSize: '2rem', color: '#FFD700' }} /> 
+                        </div>
+                      
+                        <Typography style={{ fontSize: '0.8rem', color: 'white', textTransform: 'none' }}>
+                            Unlock referral asks
+                        </Typography>
                     </div>
-                    {/* Typography for button text, styled for visibility and non-capitalized text */}
-                    <Typography style={{ fontSize: '0.8rem', color: 'white', textTransform: 'none' }}>
-                        Unlock referral asks
-                    </Typography>
-                </div>
-            </Button>
-        </div>
+                </Button>
+            </div>
+        </animated.div>
     )
 }
 

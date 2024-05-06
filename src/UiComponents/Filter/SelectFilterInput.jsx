@@ -1,7 +1,6 @@
 import React from 'react';
 import { Box, TextField, RadioGroup, FormControlLabel, Radio, FormControl, FormLabel } from '@mui/material';
 
-
 const SelectFilterInput = ({ selectedFilter, filters, handleFilterValueChange, handleWorkTypeChange, filterOptions }) => {
  
   return (
@@ -21,7 +20,7 @@ const SelectFilterInput = ({ selectedFilter, filters, handleFilterValueChange, h
         </FormControl>
       ) : (
         <TextField
-          fullWidt
+          fullWidth
           type="text" 
           name={selectedFilter} 
           value={filters[selectedFilter] || ''} 
