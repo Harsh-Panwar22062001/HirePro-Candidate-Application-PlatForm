@@ -1,6 +1,6 @@
 import "./App.css";
 import FiltersSection from "./Pages/FilterSection";
-import HiringCard from "./Pages/HiringCard";
+import Hiringlist from "./Pages/Hiringlist";
 import { useState } from "react";
 
 function App() {
@@ -15,7 +15,8 @@ function App() {
   return (
     <div className="App">
       <FiltersSection filters={filters} setFilters={setFilters} />
-      <HiringCard filters={filters} />
+      
+      <Hiringlist filters={filters} />
     </div>
   );
 }

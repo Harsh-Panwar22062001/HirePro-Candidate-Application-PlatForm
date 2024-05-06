@@ -1,6 +1,8 @@
 import React, { useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchJobs, setFilteredJobs } from '../features/jobSlice.js';
+import {  fetchJobs, setFilteredJobs } from '../Jobredux/JobKit.js';
+
+
 
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { Container, Grid, Box } from '@mui/material';

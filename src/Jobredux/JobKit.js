@@ -43,17 +43,17 @@ const initialState = {
     }
 };
 
-const jobsSlice = createSlice({
+const JobKit = createSlice({
     name: 'jobs',
     initialState,
     //creation of Reducers for filtering
     reducers: {
         setFilteredJobs: (state, action) => {
-            //getting data from filters which is disspatched from jobList.jsx
+            //getting data from filters which is dispatched from jobList.jsx
             const { location, jobRole, minExp, minJdSalary, workType,companyName } = action.payload;
             // getting all the data passed into state for filtering
             state.filter = { location: location.toLowerCase(), jobRole: jobRole.toLowerCase(), minExp: minExp, minJdSalary: minJdSalary, workType: workType,companyName: companyName.toLowerCase() }
-            state.visibleJobs = state.allJobs.filter(job => {// matching all the condtions for filtering
+            state.visibleJobs = state.allJobs.filter(job => {// matching all the conditions for filtering
                 const jobLocationMatches = job.location.toLowerCase().includes(state.filter.location);
                 const jobRoleMatches = job.jobRole.toLowerCase().includes(state.filter.jobRole);
                 //matching the minExp and null case
@@ -82,7 +82,7 @@ const jobsSlice = createSlice({
             })
             .addCase(fetchJobs.fulfilled, (state, action) => { //fetching data when givendata is whole rendered so new data can be fetched
                 state.allJobs = [...state.allJobs, ...action.payload];
-                state.visibleJobs = state.allJobs.filter(job => {// matching all the condtions for filtering as above reducers
+                state.visibleJobs = state.allJobs.filter(job => {// matching all the conditions for filtering as above reducers
                     const jobLocationMatches = job.location.toLowerCase().includes(state.filter.location);
                     const jobRoleMatches = job.jobRole.toLowerCase().includes(state.filter.jobRole);
                     const minExpMatches = state.filter.minExp ? job.minExp >= state.filter.minExp : true;
@@ -107,5 +107,7 @@ const jobsSlice = createSlice({
     },
 });
 //exporting the reducers for use
-export const { setFilteredJobs } = jobsSlice.actions;
-export default jobsSlice.reducer;
+export const { setFilteredJobs } = JobKit.actions;
+export default JobKit.reducer;
+
+
